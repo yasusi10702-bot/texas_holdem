@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Texas Hold'em Poker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --felt: #1a4a2e;
+  --felt-dark: #0f2e1c;
+  --felt-light: #22603a;
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --gold-dark: #8a6820;
+  --ivory: #f5f0e8;
+  --red-suit: #c0392b;
+  --black-suit: #1a1a2e;
+  --chip-red: #e74c3c;
+  --chip-blue: #2980b9;
+  --chip-green: #27ae60;
+  --chip-black: #2c3e50;
+  --chip-white: #ecf0f1;
+  --table-border: #8B6914;
+  --shadow: rgba(0,0,0,0.6);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0a0a0a;
+  font-family: 'Crimson Text', serif;
+  color: var(--ivory);
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  touch-action: manipulation;
+}
+
+/* ========== SCREENS ========== */
+.screen { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+.screen.active { display: flex; }
+
+/* ========== TITLE SCREEN ========== */
+#title-screen {
+  background: radial-gradient(ellipse at center, #1a0a00 0%, #000 70%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.title-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title-logo h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(22px, 5vw, 48px);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  background: linear-gradient(180deg, #f0d080 0%, #c9a84c 40%, #8a6820 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 0 20px rgba(201,168,76,0.4));
+}
+
+.title-logo .subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(10px, 2vw, 16px);
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.title-cards {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.deco-card {
+  width: clamp(36px, 7vw, 54px);
+  height: clamp(52px, 10vw, 78px);
+  background: white;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(18px, 4vw, 32px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  animation: float 3s ease-in-out infinite;
+}
+.deco-card:nth-child(2) { animation-delay: 0.3s; }
+.deco-card:nth-child(3) { animation-delay: 0.6s; }
+.deco-card:nth-child(4) { animation-delay: 0.9s; }
+.deco-card:nth-child(5) { animation-delay: 1.2s; }
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Rules section */
+.rules-panel {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 12px;
+  padding: 16px 20px;
+  max-width: 680px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.rules-panel h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(13px, 2.5vw, 18px);
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  text-align: center;
+  border-bottom: 1px solid rgba(201,168,76,0.3);
+  padding-bottom: 8px;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.rule-item {
+  font-size: clamp(10px, 1.8vw, 13px);
+  line-height: 1.5;
+  color: rgba(245,240,232,0.85);
+}
+.rule-item strong {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
+/* Hand rankings */
+.hands-panel {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 12px;
+  padding: 16px 20px;
+  max-width: 680px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.hands-panel h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(13px, 2.5vw, 18px);
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  text-align: center;
+  border-bottom: 1px solid rgba(201,168,76,0.3);
+  padding-bottom: 8px;
+}
+
+.hand-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.hand-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(10px, 1.8vw, 13px);
+}
+
+.hand-rank {
+  background: var(--gold-dark);
+  color: var(--gold-light);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.hand-name { color: var(--ivory); font-weight: 600; }
+.hand-desc { color: rgba(245,240,232,0.6); font-size: 0.85em; }
+
+/* Setup form */
+.setup-panel {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 12px;
+  padding: 20px 24px;
+  max-width: 480px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.setup-panel h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(14px, 2.5vw, 20px);
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.form-row label {
+  font-size: clamp(12px, 2vw, 15px);
+  color: var(--ivory);
+  flex: 1;
+}
+
+.form-row select, .form-row input {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 6px;
+  color: var(--gold-light);
+  font-family: 'Crimson Text', serif;
+  font-size: clamp(13px, 2vw, 16px);
+  padding: 6px 10px;
+  width: 120px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-row select:focus, .form-row input:focus {
+  border-color: var(--gold);
+}
+.form-row select option { background: #1a1a1a; color: var(--ivory); }
+
+.btn-start {
+  width: 100%;
+  padding: 14px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(14px, 2.5vw, 18px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  background: linear-gradient(135deg, #8a6820, #c9a84c, #8a6820);
+  color: #1a0a00;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+}
+.btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(201,168,76,0.5); }
+.btn-start:active { transform: translateY(0); }
+
+/* ========== GAME SCREEN ========== */
+#game-screen {
+  flex-direction: column;
+  background: radial-gradient(ellipse at center, #0f2e1c 0%, #071a0f 100%);
+  overflow: hidden;
+}
+
+/* Info bar */
+.info-bar {
+  height: 36px;
+  background: rgba(0,0,0,0.5);
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+.info-bar .round-info {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+
+.phase-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold-light);
+  letter-spacing: 0.08em;
+}
+
+.hands-toggle {
+  font-size: 11px;
+  color: var(--gold);
+  cursor: pointer;
+  padding: 4px 8px;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 4px;
+  font-family: 'Cinzel', serif;
+  transition: all 0.2s;
+}
+.hands-toggle:hover { background: rgba(201,168,76,0.1); }
+
+/* Main game area */
+.game-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Table */
+.poker-table {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(75vh, 85vw);
+  height: min(45vh, 55vw);
+  background: radial-gradient(ellipse at center, var(--felt-light) 0%, var(--felt) 60%, var(--felt-dark) 100%);
+  border-radius: 50%;
+  border: 8px solid var(--table-border);
+  box-shadow: 
+    0 0 0 4px #5a3e0a,
+    0 0 40px rgba(0,0,0,0.8),
+    inset 0 0 60px rgba(0,0,0,0.3);
+  z-index: 1;
+}
+
+.table-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(8px, 1.5vw, 14px);
+  color: rgba(255,255,255,0.08);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Community cards */
+.community-area {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -65%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.community-cards {
+  display: flex;
+  gap: 5px;
+}
+
+.pot-display {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(10px, 1.8vw, 14px);
+  color: var(--gold-light);
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  padding: 3px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(201,168,76,0.3);
+}
+
+/* Cards */
+.card {
+  width: clamp(28px, 5vw, 44px);
+  height: clamp(40px, 7vw, 62px);
+  background: white;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(10px, 2vw, 16px);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  position: relative;
+  transition: transform 0.15s;
+  flex-shrink: 0;
+  font-family: 'Crimson Text', serif;
+  line-height: 1;
+}
+
+.card.red { color: var(--red-suit); }
+.card.black { color: var(--black-suit); }
+
+.card-rank {
+  font-size: clamp(9px, 1.6vw, 13px);
+  font-weight: 600;
+  line-height: 1;
+}
+.card-suit {
+  font-size: clamp(10px, 1.8vw, 15px);
+  line-height: 1;
+}
+
+.card.face-down {
+  background: linear-gradient(135deg, #1a3a6a 25%, #0d2040 25%, #0d2040 50%, #1a3a6a 50%, #1a3a6a 75%, #0d2040 75%);
+  background-size: 8px 8px;
+  border: 2px solid #c9a84c;
+}
+
+.card.placeholder {
+  background: rgba(255,255,255,0.05);
+  border: 2px dashed rgba(255,255,255,0.2);
+  box-shadow: none;
+}
+
+.card.highlight {
+  box-shadow: 0 0 12px 3px rgba(255,215,0,0.7);
+  transform: translateY(-3px);
+}
+
+/* Player spots */
+.player-spot {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.player-info {
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 8px;
+  padding: 4px 8px;
+  text-align: center;
+  min-width: 80px;
+  max-width: 110px;
+  transition: all 0.3s;
+}
+
+.player-spot.active-player .player-info {
+  border-color: #ffd700;
+  box-shadow: 0 0 12px rgba(255,215,0,0.4);
+  background: rgba(30,20,0,0.85);
+}
+
+.player-spot.folded .player-info {
+  opacity: 0.4;
+}
+
+.player-spot.busted .player-info {
+  opacity: 0.3;
+  border-color: rgba(255,0,0,0.3);
+}
+
+.player-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(8px, 1.4vw, 11px);
+  color: var(--gold-light);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+}
+
+.player-chips {
+  font-size: clamp(9px, 1.5vw, 12px);
+  color: var(--ivory);
+}
+
+.player-bet {
+  font-size: clamp(8px, 1.3vw, 10px);
+  color: #ffd700;
+  min-height: 12px;
+}
+
+.player-status-badge {
+  font-size: clamp(7px, 1.2vw, 9px);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;
+}
+.badge-dealer { background: #8a6820; color: var(--gold-light); }
+.badge-sb { background: #c0392b; color: #fff; }
+.badge-bb { background: #2980b9; color: #fff; }
+.badge-fold { background: rgba(100,100,100,0.5); color: #aaa; }
+.badge-call { background: rgba(41,128,185,0.7); color: #fff; }
+.badge-raise { background: rgba(231,76,60,0.7); color: #fff; }
+.badge-check { background: rgba(39,174,96,0.7); color: #fff; }
+.badge-allin { background: linear-gradient(135deg, #f39c12, #e74c3c); color: #fff; }
+.badge-win { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #1a0a00; }
+
+.player-cards {
+  display: flex;
+  gap: 3px;
+}
+
+.role-badges {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Action area */
+.action-area {
+  height: auto;
+  min-height: 100px;
+  background: rgba(0,0,0,0.6);
+  border-top: 1px solid rgba(201,168,76,0.2);
+  padding: 8px 12px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.action-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(10px, 1.8vw, 13px);
+}
+
+.current-player-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(11px, 2vw, 15px);
+  color: var(--gold);
+}
+
+.bet-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bet-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.bet-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  outline: none;
+}
+.bet-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--gold);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.bet-display {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(12px, 2vw, 15px);
+  color: var(--gold-light);
+  min-width: 60px;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 4px;
+  padding: 3px 6px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  flex: 1;
+  min-width: 60px;
+  padding: 8px 4px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(10px, 1.8vw, 13px);
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.05em;
+}
+.btn-action:active { transform: scale(0.97); }
+.btn-action:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.btn-fold { background: rgba(100,100,100,0.4); border: 1px solid rgba(150,150,150,0.4); color: #ccc; }
+.btn-fold:hover:not(:disabled) { background: rgba(150,150,150,0.5); }
+.btn-check { background: rgba(39,174,96,0.3); border: 1px solid rgba(39,174,96,0.5); color: #7dcea0; }
+.btn-check:hover:not(:disabled) { background: rgba(39,174,96,0.5); }
+.btn-call { background: rgba(41,128,185,0.3); border: 1px solid rgba(41,128,185,0.5); color: #7fb3d3; }
+.btn-call:hover:not(:disabled) { background: rgba(41,128,185,0.5); }
+.btn-raise { background: rgba(230,126,34,0.3); border: 1px solid rgba(230,126,34,0.5); color: #f0b27a; }
+.btn-raise:hover:not(:disabled) { background: rgba(230,126,34,0.5); }
+.btn-allin { background: rgba(231,76,60,0.3); border: 1px solid rgba(231,76,60,0.5); color: #f1948a; }
+.btn-allin:hover:not(:disabled) { background: rgba(231,76,60,0.5); }
+
+/* Hands reference overlay */
+.hands-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.hands-overlay.show { display: flex; }
+
+.hands-ref-panel {
+  background: rgba(15,20,10,0.98);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.hands-ref-panel h3 {
+  font-family: 'Cinzel', serif;
+  color: var(--gold);
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 14px;
+  letter-spacing: 0.1em;
+}
+
+.hand-ref-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+}
+
+.hand-ref-rank {
+  background: var(--gold-dark);
+  color: var(--gold-light);
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hand-ref-name { color: var(--gold-light); font-weight: 600; min-width: 120px; }
+.hand-ref-desc { color: rgba(245,240,232,0.6); font-size: 0.9em; }
+
+.btn-close-overlay {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  font-family: 'Cinzel', serif;
+  background: rgba(201,168,76,0.2);
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Result overlay */
+.result-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.result-overlay.show { display: flex; }
+
+.result-panel {
+  background: rgba(10,20,10,0.98);
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(201,168,76,0.3);
+}
+
+.result-panel h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(16px, 3vw, 24px);
+  color: var(--gold);
+  margin-bottom: 16px;
+  letter-spacing: 0.1em;
+}
+
+.result-winner {
+  font-size: clamp(14px, 2.5vw, 18px);
+  color: var(--gold-light);
+  margin-bottom: 8px;
+}
+
+.result-hand {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(12px, 2vw, 16px);
+  color: #ffd700;
+  margin-bottom: 16px;
+}
+
+.result-cards {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.showdown-list {
+  text-align: left;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.showdown-item {
+  padding: 8px 12px;
+  font-size: clamp(11px, 1.8vw, 13px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.showdown-item:last-child { border-bottom: none; }
+.showdown-item.winner-item { background: rgba(201,168,76,0.1); }
+.showdown-name { color: var(--gold-light); font-weight: 600; font-family: 'Cinzel', serif; font-size: 11px; }
+.showdown-hand-name { color: var(--ivory); }
+.showdown-chips { color: #7dcea0; font-size: 11px; }
+
+.showdown-cards { display: flex; gap: 3px; }
+
+.btn-next-round {
+  width: 100%;
+  padding: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(13px, 2vw, 16px);
+  background: linear-gradient(135deg, #8a6820, #c9a84c, #8a6820);
+  color: #1a0a00;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+}
+.btn-next-round:hover { filter: brightness(1.1); }
+
+/* Game over screen */
+#gameover-screen {
+  background: radial-gradient(ellipse at center, #1a0a00 0%, #000 70%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.gameover-panel {
+  max-width: 500px;
+  width: 100%;
+}
+
+.gameover-panel h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(24px, 5vw, 42px);
+  background: linear-gradient(180deg, #f0d080 0%, #c9a84c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  letter-spacing: 0.1em;
+}
+
+.final-standings {
+  width: 100%;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.standing-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
+}
+.standing-item:last-child { border-bottom: none; }
+.standing-item.rank-1 { background: rgba(201,168,76,0.15); }
+.standing-rank { font-family: 'Cinzel', serif; color: var(--gold); font-size: 18px; font-weight: 900; width: 30px; }
+.standing-name { color: var(--ivory); flex: 1; font-family: 'Cinzel', serif; font-size: 13px; }
+.standing-chips { color: #7dcea0; font-size: 13px; }
+
+.btn-restart {
+  padding: 14px 40px;
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  background: linear-gradient(135deg, #8a6820, #c9a84c, #8a6820);
+  color: #1a0a00;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+}
+.btn-restart:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+/* Log */
+.action-log {
+  font-size: clamp(9px, 1.5vw, 11px);
+  color: rgba(245,240,232,0.5);
+  min-height: 14px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* CPU thinking */
+.cpu-thinking {
+  display: inline-block;
+  animation: blink 0.5s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Blinds info */
+.blinds-info {
+  font-size: clamp(9px, 1.4vw, 11px);
+  color: rgba(201,168,76,0.6);
+}
+
+/* Responsive landscape adjustments */
+@media (max-height: 420px) {
+  .poker-table {
+    width: min(50vh, 70vw);
+    height: min(32vh, 45vw);
+  }
+  .action-area {
+    padding: 5px 8px;
+    gap: 4px;
+  }
+  .btn-action { padding: 6px 4px; }
+  .info-bar { height: 28px; }
+}
+
+/* Card animation */
+@keyframes dealCard {
+  from { transform: translate(-50%, -200%) scale(0.5); opacity: 0; }
+  to { transform: translate(0,0) scale(1); opacity: 1; }
+}
+.card.deal-anim { animation: dealCard 0.3s ease-out; }
+
+/* Chip animation */
+@keyframes chipIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Current bet amount chips display */
+.bet-presets {
+  display: flex;
+  gap: 4px;
+}
+.btn-preset {
+  padding: 4px 8px;
+  font-size: clamp(9px, 1.5vw, 11px);
+  font-family: 'Cinzel', serif;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--gold);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-preset:hover { background: rgba(201,168,76,0.3); }
+</style>
+</head>
+<body>
+
+<!-- TITLE SCREEN -->
+<div id="title-screen" class="screen active">
+  <div class="title-logo">
+    <h1>TEXAS HOLD'EM</h1>
+    <div class="subtitle">PROFESSIONAL POKER</div>
+  </div>
+  <div class="title-cards">
+    <div class="deco-card" style="color:#c0392b">🂱</div>
+    <div class="deco-card" style="color:#1a1a2e">🂮</div>
+    <div class="deco-card" style="color:#c0392b">🂻</div>
+    <div class="deco-card" style="color:#1a1a2e">🃁</div>
+    <div class="deco-card" style="color:#c0392b">🂼</div>
+  </div>
+
+  <div class="rules-panel">
+    <h2>📋 ゲームルール</h2>
+    <div class="rules-grid">
+      <div class="rule-item"><strong>基本：</strong>2枚の手札と5枚のコミュニティカードで最強の5枚を作る</div>
+      <div class="rule-item"><strong>ブラインド：</strong>毎ラウンドSBとBBが強制ベット。ディーラーボタンが左回りに移動</div>
+      <div class="rule-item"><strong>プリフロップ：</strong>手札2枚配布後、BBの左から始動。アクション順に進む</div>
+      <div class="rule-item"><strong>フロップ：</strong>コミュニティカード3枚公開。SBから時計回りにアクション</div>
+      <div class="rule-item"><strong>ターン：</strong>4枚目公開。同様にアクション</div>
+      <div class="rule-item"><strong>リバー：</strong>5枚目公開。最終ベッティングラウンド</div>
+      <div class="rule-item"><strong>ショーダウン：</strong>全員の手札公開。最強の手を持つプレイヤーが勝利</div>
+      <div class="rule-item"><strong>レイズ：</strong>前のレイズ額以上の増額が必要。最低レイズ = BB×2</div>
+    </div>
+  </div>
+
+  <div class="hands-panel">
+    <h2>🏆 役の強さ（強い順）</h2>
+    <div class="hand-list">
+      <div class="hand-item"><div class="hand-rank">1</div><div><div class="hand-name">ロイヤルフラッシュ</div><div class="hand-desc">A K Q J 10 同スート</div></div></div>
+      <div class="hand-item"><div class="hand-rank">2</div><div><div class="hand-name">ストレートフラッシュ</div><div class="hand-desc">連続5枚 同スート</div></div></div>
+      <div class="hand-item"><div class="hand-rank">3</div><div><div class="hand-name">フォーカード</div><div class="hand-desc">同ランク4枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">4</div><div><div class="hand-name">フルハウス</div><div class="hand-desc">スリーカード＋ペア</div></div></div>
+      <div class="hand-item"><div class="hand-rank">5</div><div><div class="hand-name">フラッシュ</div><div class="hand-desc">同スート5枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">6</div><div><div class="hand-name">ストレート</div><div class="hand-desc">連続5枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">7</div><div><div class="hand-name">スリーカード</div><div class="hand-desc">同ランク3枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">8</div><div><div class="hand-name">ツーペア</div><div class="hand-desc">ペア×2</div></div></div>
+      <div class="hand-item"><div class="hand-rank">9</div><div><div class="hand-name">ワンペア</div><div class="hand-desc">同ランク2枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">10</div><div><div class="hand-name">ハイカード</div><div class="hand-desc">役なし（最高カード）</div></div></div>
+    </div>
+  </div>
+
+  <div class="setup-panel">
+    <h2>⚙️ ゲーム設定</h2>
+    <div class="form-row">
+      <label>👥 プレイヤー数</label>
+      <select id="num-players">
+        <option value="2">2人</option>
+        <option value="3">3人</option>
+        <option value="4">4人</option>
+        <option value="5">5人</option>
+        <option value="6" selected>6人</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>🔄 ラウンド数</label>
+      <select id="num-rounds">
+        <option value="5">5ラウンド</option>
+        <option value="10" selected>10ラウンド</option>
+        <option value="20">20ラウンド</option>
+        <option value="50">50ラウンド</option>
+        <option value="0">無制限</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>💰 初期チップ数</label>
+      <select id="start-chips">
+        <option value="500">500</option>
+        <option value="1000" selected>1,000</option>
+        <option value="2000">2,000</option>
+        <option value="5000">5,000</option>
+        <option value="10000">10,000</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>🔵 BB（ビッグブラインド）</label>
+      <select id="bb-amount">
+        <option value="10">10</option>
+        <option value="20" selected>20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="200">200</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>🤖 CPU難易度</label>
+      <select id="cpu-level">
+        <option value="easy">イージー</option>
+        <option value="normal" selected>ノーマル</option>
+        <option value="hard">ハード</option>
+      </select>
+    </div>
+    <button class="btn-start" onclick="startGame()">🃏 ゲームスタート</button>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="game-screen" class="screen">
+  <div class="info-bar">
+    <div class="round-info" id="round-info">ラウンド 1/10</div>
+    <div class="phase-badge" id="phase-badge">PREFLOP</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="blinds-info" id="blinds-info">SB:10 BB:20</div>
+      <div class="hands-toggle" onclick="toggleHandsRef()">役一覧</div>
+    </div>
+  </div>
+
+  <div class="game-area" id="game-area">
+    <div class="poker-table" id="poker-table">
+      <div class="table-logo">TEXAS HOLD'EM</div>
+      <div class="community-area" id="community-area">
+        <div class="community-cards" id="community-cards"></div>
+        <div class="pot-display" id="pot-display">POT: 0</div>
+      </div>
+    </div>
+    <!-- Player spots injected by JS -->
+  </div>
+
+  <div class="action-area" id="action-area">
+    <div class="action-info">
+      <div class="current-player-name" id="current-player-name">Player 1</div>
+      <div class="action-log" id="action-log"></div>
+    </div>
+    <div class="bet-controls" id="bet-controls">
+      <div class="bet-presets" id="bet-presets"></div>
+      <div class="bet-slider-wrap">
+        <input type="range" class="bet-slider" id="bet-slider" min="0" max="1000" value="0" oninput="updateBetDisplay(this.value)">
+        <div class="bet-display" id="bet-display">0</div>
+      </div>
+    </div>
+    <div class="btn-row" id="btn-row">
+      <button class="btn-action btn-fold" onclick="playerAction('fold')">FOLD</button>
+      <button class="btn-action btn-check" id="btn-check" onclick="playerAction('check')">CHECK</button>
+      <button class="btn-action btn-call" id="btn-call" onclick="playerAction('call')">CALL 0</button>
+      <button class="btn-action btn-raise" id="btn-raise" onclick="playerAction('raise')">RAISE</button>
+      <button class="btn-action btn-allin" onclick="playerAction('allin')">ALL-IN</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME OVER SCREEN -->
+<div id="gameover-screen" class="screen">
+  <div class="gameover-panel">
+    <h1>GAME OVER</h1>
+    <div class="final-standings" id="final-standings"></div>
+    <button class="btn-restart" onclick="goToTitle()">タイトルに戻る</button>
+  </div>
+</div>
+
+<!-- Hands Reference Overlay -->
+<div class="hands-overlay" id="hands-overlay">
+  <div class="hands-ref-panel">
+    <h3>🏆 役一覧（強い順）</h3>
+    <div class="hand-ref-item"><div class="hand-ref-rank">1</div><div class="hand-ref-name">ロイヤルフラッシュ</div><div class="hand-ref-desc">A-K-Q-J-10 同スート</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">2</div><div class="hand-ref-name">ストレートフラッシュ</div><div class="hand-ref-desc">連続5枚 同スート</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">3</div><div class="hand-ref-name">フォーカード</div><div class="hand-ref-desc">同ランク4枚</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">4</div><div class="hand-ref-name">フルハウス</div><div class="hand-ref-desc">スリーカード＋ペア</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">5</div><div class="hand-ref-name">フラッシュ</div><div class="hand-ref-desc">同スート5枚</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">6</div><div class="hand-ref-name">ストレート</div><div class="hand-ref-desc">連続5枚（異なるスート可）</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">7</div><div class="hand-ref-name">スリーカード</div><div class="hand-ref-desc">同ランク3枚</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">8</div><div class="hand-ref-name">ツーペア</div><div class="hand-ref-desc">ペアが2組</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">9</div><div class="hand-ref-name">ワンペア</div><div class="hand-ref-desc">同ランク2枚</div></div>
+    <div class="hand-ref-item"><div class="hand-ref-rank">10</div><div class="hand-ref-name">ハイカード</div><div class="hand-ref-desc">役なし、最高ランクで比較</div></div>
+    <button class="btn-close-overlay" onclick="toggleHandsRef()">閉じる</button>
+  </div>
+</div>
+
+<!-- Result Overlay -->
+<div class="result-overlay" id="result-overlay">
+  <div class="result-panel" id="result-panel"></div>
+</div>
+
+<script>
+// ============================================================
+//  GAME STATE
+// ============================================================
+const SUITS = ['♠','♥','♦','♣'];
+const RANKS = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+const RANK_VALUES = {'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':11,'Q':12,'K':13,'A':14};
+const PHASES = ['PREFLOP','FLOP','TURN','RIVER','SHOWDOWN'];
+
+let G = {}; // game state
+
+function initGame(cfg) {
+  const names = ['あなた','CPU-2','CPU-3','CPU-4','CPU-5','CPU-6'];
+  G = {
+    cfg,
+    deck: [],
+    players: [],
+    dealerIdx: 0,
+    round: 1,
+    phase: 0,
+    pot: 0,
+    communityCards: [],
+    currentIdx: -1,
+    minRaise: cfg.bb,
+    lastRaiseAmount: cfg.bb,
+    actionCount: 0,
+    lastBet: 0,
+    roundActive: false,
+    cpuDelay: 800,
+  };
+  for (let i = 0; i < cfg.numPlayers; i++) {
+    G.players.push({
+      id: i,
+      name: names[i],
+      isHuman: i === 0,
+      chips: cfg.startChips,
+      cards: [],
+      bet: 0,
+      totalBet: 0,
+      folded: false,
+      allin: false,
+      busted: false,
+      status: '',
+    });
+  }
+}
+
+// ============================================================
+//  DECK
+// ============================================================
+function makeDeck() {
+  const d = [];
+  for (const s of SUITS) for (const r of RANKS) d.push({rank:r,suit:s});
+  return d;
+}
+function shuffle(d) {
+  for (let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];}
+  return d;
+}
+function deal(n) {
+  const cards = [];
+  for (let i=0;i<n;i++) cards.push(G.deck.pop());
+  return cards;
+}
+
+// ============================================================
+//  HAND EVALUATION
+// ============================================================
+function evalHand(cards) {
+  // cards: array of {rank, suit}, pick best 5 from 7
+  if (cards.length < 5) return {rank:0, name:'不明', tiebreakers:[]};
+  const combos = getCombinations(cards, 5);
+  let best = null;
+  for (const c of combos) {
+    const e = eval5(c);
+    if (!best || compareEval(e, best) > 0) best = e;
+  }
+  return best;
+}
+
+function getCombinations(arr, k) {
+  if (k === 0) return [[]];
+  if (arr.length < k) return [];
+  const [first, ...rest] = arr;
+  const with1 = getCombinations(rest, k-1).map(c => [first, ...c]);
+  const without = getCombinations(rest, k);
+  return [...with1, ...without];
+}
+
+function eval5(cards) {
+  const vals = cards.map(c=>RANK_VALUES[c.rank]).sort((a,b)=>b-a);
+  const suits = cards.map(c=>c.suit);
+  const flush = suits.every(s=>s===suits[0]);
+  
+  // Check straight
+  let straight = false;
+  let straightHigh = 0;
+  if (vals[0]-vals[4]===4 && new Set(vals).size===5) { straight=true; straightHigh=vals[0]; }
+  // Wheel: A-2-3-4-5
+  if (new Set(vals).size===5 && vals[0]===14 && vals[1]===5 && vals[2]===4 && vals[3]===3 && vals[4]===2) {
+    straight=true; straightHigh=5;
+  }
+  
+  const counts = {};
+  for (const v of vals) counts[v]=(counts[v]||0)+1;
+  const groups = Object.entries(counts).sort((a,b)=>b[1]-a[1]||b[0]-a[0]);
+  const freqs = groups.map(g=>parseInt(g[1]));
+  const groupVals = groups.map(g=>parseInt(g[0]));
+  
+  let rank, name, tb;
+  
+  if (flush && straight && straightHigh===14) {
+    rank=9; name='ロイヤルフラッシュ'; tb=[9,straightHigh];
+  } else if (flush && straight) {
+    rank=8; name='ストレートフラッシュ'; tb=[8,straightHigh];
+  } else if (freqs[0]===4) {
+    rank=7; name='フォーカード'; tb=[7,groupVals[0],groupVals[1]];
+  } else if (freqs[0]===3 && freqs[1]===2) {
+    rank=6; name='フルハウス'; tb=[6,groupVals[0],groupVals[1]];
+  } else if (flush) {
+    rank=5; name='フラッシュ'; tb=[5,...vals];
+  } else if (straight) {
+    rank=4; name='ストレート'; tb=[4,straightHigh];
+  } else if (freqs[0]===3) {
+    rank=3; name='スリーカード'; tb=[3,groupVals[0],...groupVals.slice(1)];
+  } else if (freqs[0]===2 && freqs[1]===2) {
+    const pairs = groupVals.slice(0,2).sort((a,b)=>b-a);
+    rank=2; name='ツーペア'; tb=[2,...pairs,groupVals[2]];
+  } else if (freqs[0]===2) {
+    rank=1; name='ワンペア'; tb=[1,groupVals[0],...groupVals.slice(1)];
+  } else {
+    rank=0; name='ハイカード'; tb=[0,...vals];
+  }
+  
+  return {rank, name, tb, cards};
+}
+
+function compareEval(a, b) {
+  for (let i=0;i<Math.max(a.tb.length,b.tb.length);i++) {
+    const av=a.tb[i]||0, bv=b.tb[i]||0;
+    if (av!==bv) return av-bv;
+  }
+  return 0;
+}
+
+// ============================================================
+//  ROUND MANAGEMENT
+// ============================================================
+function startRound() {
+  G.deck = shuffle(makeDeck());
+  G.communityCards = [];
+  G.pot = 0;
+  G.phase = 0;
+  G.lastBet = 0;
+  G.minRaise = G.cfg.bb;
+  G.lastRaiseAmount = G.cfg.bb;
+  G.roundActive = true;
+
+  for (const p of G.players) {
+    p.cards = [];
+    p.bet = 0;
+    p.totalBet = 0;
+    p.folded = false;
+    p.allin = false;
+    p.status = '';
+  }
+
+  // Deal 2 cards to each active player
+  const active = G.players.filter(p=>!p.busted);
+  for (const p of active) p.cards = deal(2);
+
+  // Determine roles
+  // Dealer is G.dealerIdx (among active players)
+  const activeIds = active.map(p=>p.id);
+  const dealerPos = activeIds.indexOf(G.dealerIdx % active.length);
+  // Reassign dealer to actual position
+  G.dealerActual = active[dealerPos % active.length].id;
+  
+  let sbPos, bbPos, utgPos;
+  if (active.length === 2) {
+    // Heads up: dealer = SB
+    sbPos = dealerPos;
+    bbPos = (dealerPos+1) % active.length;
+    utgPos = dealerPos; // preflop: SB acts first in HU
+  } else {
+    sbPos = (dealerPos+1) % active.length;
+    bbPos = (dealerPos+2) % active.length;
+    utgPos = (dealerPos+3) % active.length;
+  }
+
+  G.sbId = active[sbPos].id;
+  G.bbId = active[bbPos].id;
+  G.firstActorPreflop = active.length===2 ? active[utgPos].id : active[utgPos % active.length].id;
+
+  // Post blinds
+  const sb = G.players[G.sbId];
+  const bb = G.players[G.bbId];
+  const sbAmt = Math.min(G.cfg.bb/2, sb.chips);
+  const bbAmt = Math.min(G.cfg.bb, bb.chips);
+
+  postBlind(sb, sbAmt);
+  postBlind(bb, bbAmt);
+  G.lastBet = bbAmt;
+  G.minRaise = G.cfg.bb;
+
+  renderAll();
+  
+  // Start preflop action from UTG
+  let firstIdx;
+  if (active.length === 2) {
+    firstIdx = G.players.findIndex(p=>p.id===G.sbId);
+  } else {
+    firstIdx = G.players.findIndex(p=>p.id===G.firstActorPreflop);
+  }
+  G.currentIdx = firstIdx;
+  G.actionCount = 0;
+  
+  setTimeout(()=>nextAction(), 300);
+}
+
+function postBlind(player, amt) {
+  player.chips -= amt;
+  player.bet = amt;
+  player.totalBet = amt;
+  G.pot += amt;
+  player.allin = player.chips === 0;
+}
+
+function nextPhase() {
+  G.phase++;
+  if (G.phase > 3) { G.phase = 4; showdown(); return; }
+  
+  // Reset bets
+  for (const p of G.players) p.bet = 0;
+  G.lastBet = 0;
+  G.minRaise = G.cfg.bb;
+  G.lastRaiseAmount = G.cfg.bb;
+  G.actionCount = 0;
+
+  // Deal community cards
+  if (G.phase === 1) { // Flop
+    G.communityCards.push(...deal(3));
+  } else if (G.phase === 2 || G.phase === 3) { // Turn, River
+    G.communityCards.push(...deal(1));
+  }
+
+  renderAll();
+
+  // Find first actor (SB or next active after dealer)
+  const active = activePlayers();
+  if (active.length <= 1) { showdown(); return; }
+  
+  // First actor post-flop = first active player left of dealer
+  let startSearch = G.dealerActual;
+  let firstActor = null;
+  for (let i=1; i<=G.players.length; i++) {
+    const idx = (startSearch + i) % G.players.length;
+    const p = G.players[idx];
+    if (!p.folded && !p.busted && !p.allin) { firstActor = idx; break; }
+  }
+  if (firstActor === null) {
+    // All remaining are all-in, auto advance
+    G.currentIdx = -1;
+    setTimeout(()=>nextPhase(), 1500);
+    return;
+  }
+  G.currentIdx = firstActor;
+  setTimeout(()=>nextAction(), 400);
+}
+
+function activePlayers() {
+  return G.players.filter(p=>!p.folded && !p.busted);
+}
+
+function canAct() {
+  return G.players.filter(p=>!p.folded && !p.busted && !p.allin);
+}
+
+function nextAction() {
+  const canActPlayers = canAct();
+  const active = activePlayers();
+  
+  if (active.length <= 1) { showdown(); return; }
+  
+  // Check if betting round is complete
+  if (isBettingComplete()) {
+    setTimeout(()=>nextPhase(), 500);
+    return;
+  }
+
+  // Find next player who can act
+  let tries = 0;
+  while (tries < G.players.length) {
+    const p = G.players[G.currentIdx];
+    if (!p.folded && !p.busted && !p.allin) break;
+    G.currentIdx = (G.currentIdx + 1) % G.players.length;
+    tries++;
+  }
+  
+  if (tries >= G.players.length) {
+    setTimeout(()=>nextPhase(), 500);
+    return;
+  }
+
+  const player = G.players[G.currentIdx];
+  renderAll();
+  
+  if (player.isHuman) {
+    enableHumanActions(player);
+  } else {
+    disableHumanActions();
+    showLog(`${player.name} が考え中...`);
+    setTimeout(()=>cpuAction(player), G.cpuDelay + Math.random()*500);
+  }
+}
+
+function isBettingComplete() {
+  const canActPlayers = canAct();
+  if (canActPlayers.length === 0) return true;
+  if (canActPlayers.length === 1 && G.actionCount > 0) return true;
+  
+  // All can-act players have put in equal amounts and each acted at least once
+  const maxBet = Math.max(...G.players.filter(p=>!p.folded && !p.busted).map(p=>p.bet));
+  
+  for (const p of canActPlayers) {
+    if (p.bet < maxBet) return false;
+    if (G.phase === 0 && p.id === G.bbId && p.bet === G.cfg.bb && G.actionCount === 0) return false; // BB gets option
+  }
+  
+  return G.actionCount >= canActPlayers.length;
+}
+
+// ============================================================
+//  ACTIONS
+// ============================================================
+function playerAction(type) {
+  const player = G.players[G.currentIdx];
+  if (!player || !player.isHuman) return;
+  
+  const maxBet = Math.max(...G.players.filter(p=>!p.busted&&!p.folded).map(p=>p.bet));
+  const callAmt = Math.min(maxBet - player.bet, player.chips);
+  
+  disableHumanActions();
+  
+  if (type === 'fold') {
+    player.folded = true;
+    player.status = 'fold';
+    showLog(`${player.name} がフォールド`);
+  } else if (type === 'check') {
+    if (maxBet > player.bet) return;
+    player.status = 'check';
+    showLog(`${player.name} がチェック`);
+  } else if (type === 'call') {
+    doCall(player, callAmt);
+    showLog(`${player.name} がコール (${callAmt})`);
+  } else if (type === 'raise') {
+    const raiseAmt = parseInt(document.getElementById('bet-display').textContent);
+    if (raiseAmt < G.minRaise + maxBet) return;
+    doRaise(player, raiseAmt);
+    showLog(`${player.name} がレイズ (${raiseAmt})`);
+  } else if (type === 'allin') {
+    doAllIn(player);
+    showLog(`${player.name} がオールイン! (${player.totalBet})`);
+  }
+  
+  G.actionCount++;
+  renderAll();
+  
+  const active = activePlayers();
+  if (active.length <= 1) { setTimeout(()=>showdown(), 800); return; }
+  
+  G.currentIdx = (G.currentIdx + 1) % G.players.length;
+  setTimeout(()=>nextAction(), 300);
+}
+
+function doCall(player, amt) {
+  player.chips -= amt;
+  player.bet += amt;
+  player.totalBet += amt;
+  G.pot += amt;
+  player.allin = player.chips === 0;
+  player.status = 'call';
+}
+
+function doRaise(player, totalBetAmt) {
+  const additional = totalBetAmt - player.bet;
+  const actual = Math.min(additional, player.chips);
+  const prevMaxBet = Math.max(...G.players.filter(p=>!p.busted&&!p.folded).map(p=>p.bet));
+  player.chips -= actual;
+  G.pot += actual;
+  G.lastRaiseAmount = totalBetAmt - prevMaxBet;
+  G.minRaise = Math.max(G.cfg.bb, G.lastRaiseAmount);
+  player.bet = player.bet + actual;
+  player.totalBet += actual;
+  G.lastBet = player.bet;
+  player.allin = player.chips === 0;
+  player.status = 'raise';
+  G.actionCount = 1; // reset action count so others must respond
+}
+
+function doAllIn(player) {
+  const amt = player.chips;
+  const prevBet = player.bet;
+  player.bet += amt;
+  player.totalBet += amt;
+  player.chips = 0;
+  G.pot += amt;
+  player.allin = true;
+  player.status = 'allin';
+  if (player.bet > G.lastBet) {
+    G.lastBet = player.bet;
+    G.actionCount = 1;
+  }
+}
+
+// ============================================================
+//  CPU LOGIC
+// ============================================================
+function cpuAction(player) {
+  const maxBet = Math.max(...G.players.filter(p=>!p.busted&&!p.folded).map(p=>p.bet));
+  const callAmt = Math.min(maxBet - player.bet, player.chips);
+  const canCheck = maxBet === player.bet;
+  const level = G.cfg.cpuLevel;
+  
+  // Evaluate hand strength
+  const allCards = [...player.cards, ...G.communityCards];
+  let strength = 0;
+  if (allCards.length >= 5) {
+    const ev = evalHand(allCards);
+    strength = ev.rank / 9;
+  } else {
+    // Pre-flop: estimate from hole cards
+    strength = estimatePreflop(player.cards);
+  }
+  
+  // CPU decision
+  let action;
+  const r = Math.random();
+  
+  // Bluff factor
+  const bluff = level==='hard' ? 0.15 : level==='normal' ? 0.08 : 0.03;
+  const bluffing = r < bluff;
+  const effectiveStrength = bluffing ? Math.min(1, strength + 0.4) : strength;
+  
+  const potOdds = G.pot > 0 ? callAmt / (G.pot + callAmt) : 0;
+  
+  if (canCheck) {
+    if (effectiveStrength > 0.55 && r < 0.6) action = 'raise';
+    else action = 'check';
+  } else {
+    if (callAmt >= player.chips * 0.8) {
+      if (effectiveStrength > 0.7) action = 'allin';
+      else if (effectiveStrength > 0.4 && r < 0.4) action = 'call';
+      else action = 'fold';
+    } else if (effectiveStrength > potOdds + 0.2) {
+      if (effectiveStrength > 0.75 && r < 0.5) action = 'raise';
+      else action = 'call';
+    } else if (effectiveStrength > potOdds - 0.1 && r < 0.5) {
+      action = 'call';
+    } else {
+      action = 'fold';
+    }
+  }
+  
+  // Execute
+  if (action === 'fold') {
+    player.folded = true; player.status = 'fold';
+    showLog(`${player.name} がフォールド`);
+  } else if (action === 'check') {
+    player.status = 'check';
+    showLog(`${player.name} がチェック`);
+  } else if (action === 'call') {
+    doCall(player, callAmt);
+    showLog(`${player.name} がコール (${callAmt})`);
+  } else if (action === 'raise') {
+    const raiseSize = level==='hard' ? 
+      Math.min(player.chips, maxBet + G.minRaise + Math.floor(G.pot * (0.3 + Math.random()*0.4))) :
+      Math.min(player.chips, maxBet + G.minRaise);
+    if (raiseSize > player.chips + player.bet) {
+      doAllIn(player);
+      showLog(`${player.name} がオールイン!`);
+    } else {
+      doRaise(player, raiseSize);
+      showLog(`${player.name} がレイズ (${player.bet})`);
+    }
+  } else if (action === 'allin') {
+    doAllIn(player);
+    showLog(`${player.name} がオールイン!`);
+  }
+  
+  G.actionCount++;
+  renderAll();
+  
+  const active = activePlayers();
+  if (active.length <= 1) { setTimeout(()=>showdown(), 800); return; }
+  
+  G.currentIdx = (G.currentIdx + 1) % G.players.length;
+  setTimeout(()=>nextAction(), 300);
+}
+
+function estimatePreflop(cards) {
+  if (cards.length < 2) return 0.3;
+  const [a, b] = cards;
+  const av = RANK_VALUES[a.rank], bv = RANK_VALUES[b.rank];
+  const suited = a.suit === b.suit;
+  const pair = a.rank === b.rank;
+  const gap = Math.abs(av - bv);
+  
+  let score = (av + bv) / 28; // normalize
+  if (pair) score = 0.5 + av/28;
+  if (suited) score += 0.08;
+  if (gap <= 1) score += 0.06;
+  if (gap >= 6) score -= 0.1;
+  
+  return Math.min(1, Math.max(0.1, score));
+}
+
+// ============================================================
+//  SHOWDOWN
+// ============================================================
+function showdown() {
+  G.roundActive = false;
+  const active = activePlayers();
+  
+  if (active.length === 1) {
+    // Everyone else folded
+    const winner = active[0];
+    winner.chips += G.pot;
+    winner.status = 'win';
+    renderAll();
+    showRoundResult([{player: winner, hand: {name:'全員フォールド', rank:-1}, won: G.pot}]);
+    return;
+  }
+  
+  // Evaluate all hands
+  const evals = active.map(p => ({
+    player: p,
+    eval: evalHand([...p.cards, ...G.communityCards])
+  }));
+  
+  evals.sort((a,b) => compareEval(b.eval, a.eval));
+  
+  // Side pots (simplified: main pot only for now, basic split)
+  // Find winners (handle ties)
+  const best = evals[0].eval;
+  const winners = evals.filter(e => compareEval(e.eval, best) === 0);
+  const share = Math.floor(G.pot / winners.length);
+  const remainder = G.pot - share * winners.length;
+  
+  const results = [];
+  for (let i=0; i<winners.length; i++) {
+    const won = share + (i===0 ? remainder : 0);
+    winners[i].player.chips += won;
+    winners[i].player.status = 'win';
+    results.push({player: winners[i].player, hand: winners[i].eval, won});
+  }
+  
+  renderAll();
+  showRoundResult(results, evals);
+}
+
+function showRoundResult(results, allEvals) {
+  const panel = document.getElementById('result-panel');
+  const winnerNames = results.map(r=>r.player.name).join(' & ');
+  const winnerHand = results[0].hand.name;
+  const pot = results.reduce((s,r)=>s+r.won, 0);
+  
+  let html = `<h2>🏆 ${winnerNames}<br>が勝利！</h2>`;
+  html += `<div class="result-hand">${winnerHand}</div>`;
+  
+  // Show winner's cards
+  if (results[0].hand.cards) {
+    html += `<div class="result-cards">`;
+    for (const c of results[0].hand.cards) {
+      const color = (c.suit==='♥'||c.suit==='♦') ? 'red' : 'black';
+      html += `<div class="card ${color}"><div class="card-rank">${c.rank}</div><div class="card-suit">${c.suit}</div></div>`;
+    }
+    html += `</div>`;
+  }
+  
+  html += `<div style="font-size:13px;color:var(--gold);margin-bottom:12px;">獲得チップ: ${pot}</div>`;
+  
+  // Showdown list
+  if (allEvals && allEvals.length > 1) {
+    html += `<div class="showdown-list">`;
+    for (const e of allEvals) {
+      const isWinner = results.some(r=>r.player.id===e.player.id);
+      html += `<div class="showdown-item ${isWinner?'winner-item':''}">
+        <div>
+          <div class="showdown-name">${e.player.name}</div>
+          <div class="showdown-hand-name">${e.eval.name}</div>
+        </div>
+        <div class="showdown-cards">`;
+      for (const c of e.player.cards) {
+        const col = (c.suit==='♥'||c.suit==='♦') ? 'red' : 'black';
+        html += `<div class="card ${col}" style="transform:scale(0.7);transform-origin:left center"><div class="card-rank">${c.rank}</div><div class="card-suit">${c.suit}</div></div>`;
+      }
+      html += `</div>
+        <div class="showdown-chips">${isWinner?`+${results.find(r=>r.player.id===e.player.id).won}`:''}</div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+  
+  // Player chip counts
+  html += `<div style="font-size:11px;color:rgba(245,240,232,0.6);margin-bottom:12px;">`;
+  for (const p of G.players.filter(p=>!p.busted)) {
+    html += `${p.name}: ${p.chips} chips　`;
+  }
+  html += `</div>`;
+  
+  // Check for busts
+  for (const p of G.players) {
+    if (!p.busted && p.chips <= 0) p.busted = true;
+  }
+  
+  const isLastRound = G.cfg.numRounds > 0 && G.round >= G.cfg.numRounds;
+  const activePlrs = G.players.filter(p=>!p.busted);
+  const gameOver = activePlrs.length <= 1 || isLastRound;
+  
+  html += `<button class="btn-next-round" onclick="closeResultAndContinue()">${gameOver ? 'ゲーム終了' : `次のラウンドへ (${G.round+1}/${G.cfg.numRounds||'∞'})`}</button>`;
+  
+  panel.innerHTML = html;
+  document.getElementById('result-overlay').classList.add('show');
+}
+
+function closeResultAndContinue() {
+  document.getElementById('result-overlay').classList.remove('show');
+  
+  const activePlrs = G.players.filter(p=>!p.busted);
+  const isLastRound = G.cfg.numRounds > 0 && G.round >= G.cfg.numRounds;
+  
+  if (activePlrs.length <= 1 || isLastRound) {
+    showGameOver();
+    return;
+  }
+  
+  G.round++;
+  // Move dealer button
+  let nextDealer = (G.dealerIdx + 1) % G.players.length;
+  while (G.players[nextDealer].busted) nextDealer = (nextDealer+1) % G.players.length;
+  G.dealerIdx = nextDealer;
+  
+  startRound();
+}
+
+function showGameOver() {
+  const sorted = [...G.players].sort((a,b)=>b.chips-a.chips);
+  
+  let html = '';
+  let rank = 1;
+  for (const p of sorted) {
+    html += `<div class="standing-item ${rank===1?'rank-1':''}">
+      <div class="standing-rank">${rank}</div>
+      <div class="standing-name">${p.name}</div>
+      <div class="standing-chips">${p.chips} chips</div>
+    </div>`;
+    rank++;
+  }
+  document.getElementById('final-standings').innerHTML = html;
+  
+  showScreen('gameover-screen');
+}
+
+// ============================================================
+//  RENDERING
+// ============================================================
+function renderAll() {
+  renderCommunityCards();
+  renderPot();
+  renderPlayers();
+  updatePhase();
+}
+
+function renderCommunityCards() {
+  const container = document.getElementById('community-cards');
+  container.innerHTML = '';
+  for (let i=0; i<5; i++) {
+    if (i < G.communityCards.length) {
+      container.appendChild(makeCardEl(G.communityCards[i], true));
+    } else {
+      const ph = document.createElement('div');
+      ph.className = 'card placeholder';
+      container.appendChild(ph);
+    }
+  }
+}
+
+function renderPot() {
+  document.getElementById('pot-display').textContent = `POT: ${G.pot}`;
+}
+
+function makeCardEl(card, revealed) {
+  const el = document.createElement('div');
+  const isRed = card.suit==='♥'||card.suit==='♦';
+  el.className = `card ${revealed ? (isRed?'red':'black') : 'face-down'}`;
+  if (revealed) {
+    el.innerHTML = `<div class="card-rank">${card.rank}</div><div class="card-suit">${card.suit}</div>`;
+  }
+  return el;
+}
+
+function renderPlayers() {
+  const gameArea = document.getElementById('game-area');
+  // Remove existing player spots
+  document.querySelectorAll('.player-spot').forEach(e=>e.remove());
+  
+  const active = G.players.filter(p=>!p.busted);
+  const n = active.length;
+  const areaW = gameArea.clientWidth;
+  const areaH = gameArea.clientHeight;
+  const cx = areaW/2, cy = areaH/2;
+  const rx = areaW * 0.42, ry = areaH * 0.38;
+  
+  active.forEach((player, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI/2;
+    const px = cx + rx * Math.cos(angle);
+    const py = cy + ry * Math.sin(angle);
+    
+    const spot = document.createElement('div');
+    spot.className = `player-spot ${player.id===G.currentIdx?'active-player':''} ${player.folded?'folded':''}`;
+    spot.style.left = `${px}px`;
+    spot.style.top = `${py}px`;
+    spot.style.transform = 'translate(-50%, -50%)';
+    
+    const isDealer = player.id === G.dealerActual;
+    const isSB = player.id === G.sbId;
+    const isBB = player.id === G.bbId;
+    
+    // Role badges
+    let badgeHtml = '';
+    if (isDealer) badgeHtml += `<span class="player-status-badge badge-dealer">D</span>`;
+    if (isSB) badgeHtml += `<span class="player-status-badge badge-sb">SB</span>`;
+    if (isBB) badgeHtml += `<span class="player-status-badge badge-bb">BB</span>`;
+    if (player.status === 'fold') badgeHtml += `<span class="player-status-badge badge-fold">FOLD</span>`;
+    else if (player.status === 'check') badgeHtml += `<span class="player-status-badge badge-check">CHECK</span>`;
+    else if (player.status === 'call') badgeHtml += `<span class="player-status-badge badge-call">CALL</span>`;
+    else if (player.status === 'raise') badgeHtml += `<span class="player-status-badge badge-raise">RAISE</span>`;
+    else if (player.status === 'allin') badgeHtml += `<span class="player-status-badge badge-allin">ALL-IN</span>`;
+    else if (player.status === 'win') badgeHtml += `<span class="player-status-badge badge-win">WIN</span>`;
+    
+    // Cards
+    const showCards = player.isHuman || G.phase >= 4;
+    let cardsHtml = '';
+    for (const c of player.cards) {
+      if (showCards && !player.folded) {
+        const isRed = c.suit==='♥'||c.suit==='♦';
+        cardsHtml += `<div class="card ${isRed?'red':'black'}"><div class="card-rank">${c.rank}</div><div class="card-suit">${c.suit}</div></div>`;
+      } else if (!player.folded) {
+        cardsHtml += `<div class="card face-down"></div>`;
+      }
+    }
+    
+    spot.innerHTML = `
+      <div class="player-cards">${cardsHtml}</div>
+      <div class="player-info">
+        <div class="role-badges">${badgeHtml}</div>
+        <div class="player-name">${player.name}</div>
+        <div class="player-chips">💰 ${player.chips}</div>
+        ${player.bet > 0 ? `<div class="player-bet">BET: ${player.bet}</div>` : '<div class="player-bet"></div>'}
+      </div>
+    `;
+    
+    gameArea.appendChild(spot);
+  });
+}
+
+function updatePhase() {
+  const phases = ['PREFLOP','FLOP','TURN','RIVER','SHOWDOWN'];
+  document.getElementById('phase-badge').textContent = phases[G.phase] || 'PREFLOP';
+  const rounds = G.cfg.numRounds > 0 ? `/${G.cfg.numRounds}` : '/∞';
+  document.getElementById('round-info').textContent = `ラウンド ${G.round}${rounds}`;
+}
+
+function enableHumanActions(player) {
+  const maxBet = Math.max(...G.players.filter(p=>!p.busted&&!p.folded).map(p=>p.bet));
+  const callAmt = Math.min(maxBet - player.bet, player.chips);
+  const canCheck = maxBet === player.bet;
+  
+  document.getElementById('current-player-name').textContent = `${player.name} のターン`;
+  
+  const btnCheck = document.getElementById('btn-check');
+  const btnCall = document.getElementById('btn-call');
+  const btnRaise = document.getElementById('btn-raise');
+  
+  btnCheck.disabled = !canCheck;
+  btnCall.disabled = canCheck || callAmt <= 0;
+  btnCall.textContent = `CALL ${callAmt}`;
+  
+  // Raise slider
+  const minRaiseTotal = maxBet + G.minRaise;
+  const slider = document.getElementById('bet-slider');
+  slider.min = minRaiseTotal;
+  slider.max = player.chips + player.bet;
+  slider.value = Math.min(minRaiseTotal, player.chips + player.bet);
+  updateBetDisplay(slider.value);
+  
+  btnRaise.disabled = (player.chips + player.bet) < minRaiseTotal;
+  
+  // Presets
+  const presets = document.getElementById('bet-presets');
+  presets.innerHTML = '';
+  const potBet = Math.min(player.chips + player.bet, maxBet + G.pot);
+  const halfPot = Math.min(player.chips + player.bet, maxBet + Math.floor(G.pot/2));
+  
+  if (!canCheck && callAmt > 0) {
+    // Show useful presets
+  }
+  const pAmt = [halfPot, potBet];
+  for (const a of pAmt) {
+    if (a >= minRaiseTotal && a <= player.chips + player.bet) {
+      const btn = document.createElement('button');
+      btn.className = 'btn-preset';
+      btn.textContent = a === halfPot ? '½POT' : 'POT';
+      btn.onclick = () => { slider.value = a; updateBetDisplay(a); };
+      presets.appendChild(btn);
+    }
+  }
+  
+  // Enable all buttons
+  document.querySelectorAll('.btn-action').forEach(b => {
+    if (!b.id || b.id !== 'btn-check' && b.id !== 'btn-call' && b.id !== 'btn-raise') {
+      b.disabled = false;
+    }
+  });
+  document.getElementById('bet-controls').style.display = btnRaise.disabled ? 'none' : 'flex';
+}
+
+function disableHumanActions() {
+  document.querySelectorAll('.btn-action').forEach(b => b.disabled = true);
+}
+
+function updateBetDisplay(val) {
+  document.getElementById('bet-display').textContent = val;
+}
+
+function showLog(msg) {
+  document.getElementById('action-log').textContent = msg;
+}
+
+// ============================================================
+//  UI HELPERS
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function toggleHandsRef() {
+  document.getElementById('hands-overlay').classList.toggle('show');
+}
+
+function startGame() {
+  const cfg = {
+    numPlayers: parseInt(document.getElementById('num-players').value),
+    numRounds: parseInt(document.getElementById('num-rounds').value),
+    startChips: parseInt(document.getElementById('start-chips').value),
+    bb: parseInt(document.getElementById('bb-amount').value),
+    cpuLevel: document.getElementById('cpu-level').value,
+  };
+  
+  initGame(cfg);
+  document.getElementById('blinds-info').textContent = `SB:${cfg.bb/2} BB:${cfg.bb}`;
+  showScreen('game-screen');
+  
+  // Wait for layout then start
+  setTimeout(()=>{
+    startRound();
+  }, 200);
+}
+
+function goToTitle() {
+  showScreen('title-screen');
+}
+
+// Handle resize
+window.addEventListener('resize', ()=>{
+  if (G.players) renderPlayers();
+});
+
+// Initialize deck display on title
+window.onload = () => {
+  showScreen('title-screen');
+};
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC_2cmzqbLwfEyBLSoK7r-R9JNv9ha7-9g",
+  authDomain: "texas-e6455.firebaseapp.com",
+  projectId: "texas-e6455",
+  storageBucket: "texas-e6455.firebasestorage.app",
+  messagingSenderId: "690288210681",
+  appId: "1:690288210681:web:87eb7c0c8db2cc5cbb2828"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// テスト
+set(ref(db, "test"), {
+  msg: "OK"
+});
+</script>
+</body>
+</html>
