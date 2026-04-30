@@ -6,9 +6,11 @@
 <title>Texas Hold'em Poker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
-<input id="roomId" placeholder="部屋ID">
-<button onclick="createRoom()">部屋作成</button>
-<button onclick="joinRoom()">参加</button>
+<div>
+  <input id="roomId" placeholder="部屋ID">
+  <button onclick="createRoom()">部屋作成</button>
+  <button onclick="joinRoom()">参加</button>
+</div>  
 :root {
   --felt: #1a4a2e;
   --felt-dark: #0f2e1c;
@@ -2008,17 +2010,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 let roomId = "";
+
 window.createRoom = () => {
   roomId = document.getElementById("roomId").value;
+  alert("部屋作成：" + roomId);
+};
 
-  set(ref(db, "rooms/" + roomId), {
-    state: null
-  });
-
-  listenRoom();
-};  
 window.joinRoom = () => {
   roomId = document.getElementById("roomId").value;
+  alert("参加：" + roomId);
 };
 // テスト
 set(ref(db, "test"), {
