@@ -1965,19 +1965,15 @@ function startGame() {
     bb: parseInt(document.getElementById('bb-amount').value),
     cpuLevel: document.getElementById('cpu-level').value,
   };
-
-  // 👇 一旦戻す（重要）
+  
   initGame(cfg);
+  document.getElementById('blinds-info').textContent = `SB:${cfg.bb/2} BB:${cfg.bb}`;
   showScreen('game-screen');
-
+  
   setTimeout(()=>{
     startRound();
   }, 200);
-
-  // 👇 これ追加
-  set(ref(db, "rooms/" + roomId + "/config"), cfg);
 }
-
 function goToTitle() {
   showScreen('title-screen');
 }
@@ -2023,22 +2019,6 @@ window.createRoom = () => {
 };  
 window.joinRoom = () => {
   roomId = document.getElementById("roomId").value;
-
-  onValue(ref(db, "rooms/" + roomId + "/config"), (snapshot) => {
-    const cfg = snapshot.val();
-    if (!cfg) return;
-
-    initGame(cfg);
-
-    document.getElementById('blinds-info').textContent =
-      `SB:${cfg.bb/2} BB:${cfg.bb}`;
-
-    showScreen('game-screen');
-
-    setTimeout(() => {
-      startRound();
-    }, 200);
-  });
 };
 // テスト
 set(ref(db, "test"), {
