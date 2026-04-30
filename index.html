@@ -1966,11 +1966,15 @@ function startGame() {
     cpuLevel: document.getElementById('cpu-level').value,
   };
 
-  // 🔴 ローカルで開始しない
-  // initGame(cfg);
-  // startRound();
+  // 👇 一旦戻す（重要）
+  initGame(cfg);
+  showScreen('game-screen');
 
-  // 🔴 Firebaseに送る
+  setTimeout(()=>{
+    startRound();
+  }, 200);
+
+  // 👇 これ追加
   set(ref(db, "rooms/" + roomId + "/config"), cfg);
 }
 
@@ -1987,6 +1991,10 @@ window.addEventListener('resize', ()=>{
 window.onload = () => {
   showScreen('title-screen');
 };
+window.initGame = initGame;
+window.startRound = startRound;
+window.showScreen = showScreen;
+window.renderAll = renderAll;
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
