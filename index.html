@@ -1086,7 +1086,7 @@ body {
   </div>
 </div>
 <!-- GAME SCREEN -->
-<div id="game-screen" class="screen" style="display:none;">
+<div id="game-screen" class="screen">
   <div class="info-bar">
     <div class="round-info" id="round-info">ラウンド 1/10</div>
     <div class="phase-badge" id="phase-badge">PREFLOP</div>
@@ -2018,9 +2018,19 @@ function toggleHandsRef() {
 function startGame() {
   alert("スタート押された");
 
-  // 👇 強制的に画面切り替え
-  document.getElementById("title-screen").style.display = "none";
-  document.getElementById("game-screen").style.display = "block";
+  const cfg = {
+    numPlayers: parseInt(document.getElementById('num-players').value),
+    numRounds: parseInt(document.getElementById('num-rounds').value),
+    startChips: parseInt(document.getElementById('start-chips').value),
+    bb: parseInt(document.getElementById('bb-amount').value),
+    cpuLevel: document.getElementById('cpu-level').value,
+  };
+
+  initGame(cfg);
+
+  setTimeout(()=>{
+    startRound();
+  }, 200);
 }
 }function goToTitle() {
   showScreen('title-screen');
