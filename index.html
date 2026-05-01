@@ -1,64 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<html>
-<head>
-
-  <!-- 👇 ここに追加 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-</head>
-<head>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- 👇 ここに追加 -->
-  <style>
-    #room-ui {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-    
-      background: rgba(0,0,0,0.8);
-      padding: 15px;
-    
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    
-      z-index: 999;
-    }
-    
-    body {
-      padding-bottom: 80px;
-    }
-    body {
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #0b0f1a;
-    }
-
-    #game-container {
-      width: 95vw;
-      max-width: 900px;
-      height: 90vh;
-      max-height: 700px;
-      background: #123;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-  </style>
-
-</head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Texas Hold'em Poker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
 :root {
   --felt: #1a4a2e;
   --felt-dark: #0f2e1c;
@@ -982,109 +930,103 @@ body {
 <body>
 
 <!-- TITLE SCREEN -->
-<div id="game-container">  
-  <div id="title-screen">
-    <div id="room-ui">
-      <input id="roomId" placeholder="部屋ID">
-      <button id="btnCreate">部屋作成</button>
-      <button id="btnJoin">参加</button>
-    </div>
-    <div class="title-logo">
-      <h1>TEXAS HOLD'EM</h1>
-      <div class="subtitle">PROFESSIONAL POKER</div>
-    </div>
-    <div class="title-cards">
-      <div class="deco-card" style="color:#c0392b">🂱</div>
-      <div class="deco-card" style="color:#1a1a2e">🂮</div>
-      <div class="deco-card" style="color:#c0392b">🂻</div>
-      <div class="deco-card" style="color:#1a1a2e">🃁</div>
-      <div class="deco-card" style="color:#c0392b">🂼</div>
-    </div>
-  
-    <div class="rules-panel">
-      <h2>📋 ゲームルール</h2>
-      <div class="rules-grid">
-        <div class="rule-item"><strong>基本：</strong>2枚の手札と5枚のコミュニティカードで最強の5枚を作る</div>
-        <div class="rule-item"><strong>ブラインド：</strong>毎ラウンドSBとBBが強制ベット。ディーラーボタンが左回りに移動</div>
-        <div class="rule-item"><strong>プリフロップ：</strong>手札2枚配布後、BBの左から始動。アクション順に進む</div>
-        <div class="rule-item"><strong>フロップ：</strong>コミュニティカード3枚公開。SBから時計回りにアクション</div>
-        <div class="rule-item"><strong>ターン：</strong>4枚目公開。同様にアクション</div>
-        <div class="rule-item"><strong>リバー：</strong>5枚目公開。最終ベッティングラウンド</div>
-        <div class="rule-item"><strong>ショーダウン：</strong>全員の手札公開。最強の手を持つプレイヤーが勝利</div>
-        <div class="rule-item"><strong>レイズ：</strong>前のレイズ額以上の増額が必要。最低レイズ = BB×2</div>
-      </div>
-    </div>
-  
-    <div class="hands-panel">
-      <h2>🏆 役の強さ（強い順）</h2>
-      <div class="hand-list">
-        <div class="hand-item"><div class="hand-rank">1</div><div><div class="hand-name">ロイヤルフラッシュ</div><div class="hand-desc">A K Q J 10 同スート</div></div></div>
-        <div class="hand-item"><div class="hand-rank">2</div><div><div class="hand-name">ストレートフラッシュ</div><div class="hand-desc">連続5枚 同スート</div></div></div>
-        <div class="hand-item"><div class="hand-rank">3</div><div><div class="hand-name">フォーカード</div><div class="hand-desc">同ランク4枚</div></div></div>
-        <div class="hand-item"><div class="hand-rank">4</div><div><div class="hand-name">フルハウス</div><div class="hand-desc">スリーカード＋ペア</div></div></div>
-        <div class="hand-item"><div class="hand-rank">5</div><div><div class="hand-name">フラッシュ</div><div class="hand-desc">同スート5枚</div></div></div>
-        <div class="hand-item"><div class="hand-rank">6</div><div><div class="hand-name">ストレート</div><div class="hand-desc">連続5枚</div></div></div>
-        <div class="hand-item"><div class="hand-rank">7</div><div><div class="hand-name">スリーカード</div><div class="hand-desc">同ランク3枚</div></div></div>
-        <div class="hand-item"><div class="hand-rank">8</div><div><div class="hand-name">ツーペア</div><div class="hand-desc">ペア×2</div></div></div>
-        <div class="hand-item"><div class="hand-rank">9</div><div><div class="hand-name">ワンペア</div><div class="hand-desc">同ランク2枚</div></div></div>
-        <div class="hand-item"><div class="hand-rank">10</div><div><div class="hand-name">ハイカード</div><div class="hand-desc">役なし（最高カード）</div></div></div>
-      </div>
-    </div>
-  
-    <div class="setup-panel">
-      <h2>⚙️ ゲーム設定</h2>
-      <div class="form-row">
-        <label>👥 プレイヤー数</label>
-        <select id="num-players">
-          <option value="2">2人</option>
-          <option value="3">3人</option>
-          <option value="4">4人</option>
-          <option value="5">5人</option>
-          <option value="6" selected>6人</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label>🔄 ラウンド数</label>
-        <select id="num-rounds">
-          <option value="5">5ラウンド</option>
-          <option value="10" selected>10ラウンド</option>
-          <option value="20">20ラウンド</option>
-          <option value="50">50ラウンド</option>
-          <option value="0">無制限</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label>💰 初期チップ数</label>
-        <select id="start-chips">
-          <option value="500">500</option>
-          <option value="1000" selected>1,000</option>
-          <option value="2000">2,000</option>
-          <option value="5000">5,000</option>
-          <option value="10000">10,000</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label>🔵 BB（ビッグブラインド）</label>
-        <select id="bb-amount">
-          <option value="10">10</option>
-          <option value="20" selected>20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="200">200</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label>🤖 CPU難易度</label>
-        <select id="cpu-level">
-          <option value="easy">イージー</option>
-          <option value="normal" selected>ノーマル</option>
-          <option value="hard">ハード</option>
-        </select>
-      </div>
-      <button id="startBtn" class="btn-start" onclick="startGame()">🃏 ゲームスタート</button>
+<div id="title-screen" class="screen active">
+  <div class="title-logo">
+    <h1>TEXAS HOLD'EM</h1>
+    <div class="subtitle">PROFESSIONAL POKER</div>
+  </div>
+  <div class="title-cards">
+    <div class="deco-card" style="color:#c0392b">🂱</div>
+    <div class="deco-card" style="color:#1a1a2e">🂮</div>
+    <div class="deco-card" style="color:#c0392b">🂻</div>
+    <div class="deco-card" style="color:#1a1a2e">🃁</div>
+    <div class="deco-card" style="color:#c0392b">🂼</div>
+  </div>
+
+  <div class="rules-panel">
+    <h2>📋 ゲームルール</h2>
+    <div class="rules-grid">
+      <div class="rule-item"><strong>基本：</strong>2枚の手札と5枚のコミュニティカードで最強の5枚を作る</div>
+      <div class="rule-item"><strong>ブラインド：</strong>毎ラウンドSBとBBが強制ベット。ディーラーボタンが左回りに移動</div>
+      <div class="rule-item"><strong>プリフロップ：</strong>手札2枚配布後、BBの左から始動。アクション順に進む</div>
+      <div class="rule-item"><strong>フロップ：</strong>コミュニティカード3枚公開。SBから時計回りにアクション</div>
+      <div class="rule-item"><strong>ターン：</strong>4枚目公開。同様にアクション</div>
+      <div class="rule-item"><strong>リバー：</strong>5枚目公開。最終ベッティングラウンド</div>
+      <div class="rule-item"><strong>ショーダウン：</strong>全員の手札公開。最強の手を持つプレイヤーが勝利</div>
+      <div class="rule-item"><strong>レイズ：</strong>前のレイズ額以上の増額が必要。最低レイズ = BB×2</div>
     </div>
   </div>
+
+  <div class="hands-panel">
+    <h2>🏆 役の強さ（強い順）</h2>
+    <div class="hand-list">
+      <div class="hand-item"><div class="hand-rank">1</div><div><div class="hand-name">ロイヤルフラッシュ</div><div class="hand-desc">A K Q J 10 同スート</div></div></div>
+      <div class="hand-item"><div class="hand-rank">2</div><div><div class="hand-name">ストレートフラッシュ</div><div class="hand-desc">連続5枚 同スート</div></div></div>
+      <div class="hand-item"><div class="hand-rank">3</div><div><div class="hand-name">フォーカード</div><div class="hand-desc">同ランク4枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">4</div><div><div class="hand-name">フルハウス</div><div class="hand-desc">スリーカード＋ペア</div></div></div>
+      <div class="hand-item"><div class="hand-rank">5</div><div><div class="hand-name">フラッシュ</div><div class="hand-desc">同スート5枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">6</div><div><div class="hand-name">ストレート</div><div class="hand-desc">連続5枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">7</div><div><div class="hand-name">スリーカード</div><div class="hand-desc">同ランク3枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">8</div><div><div class="hand-name">ツーペア</div><div class="hand-desc">ペア×2</div></div></div>
+      <div class="hand-item"><div class="hand-rank">9</div><div><div class="hand-name">ワンペア</div><div class="hand-desc">同ランク2枚</div></div></div>
+      <div class="hand-item"><div class="hand-rank">10</div><div><div class="hand-name">ハイカード</div><div class="hand-desc">役なし（最高カード）</div></div></div>
+    </div>
+  </div>
+
+  <div class="setup-panel">
+    <h2>⚙️ ゲーム設定</h2>
+    <div class="form-row">
+      <label>👥 プレイヤー数</label>
+      <select id="num-players">
+        <option value="2">2人</option>
+        <option value="3">3人</option>
+        <option value="4">4人</option>
+        <option value="5">5人</option>
+        <option value="6" selected>6人</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>🔄 ラウンド数</label>
+      <select id="num-rounds">
+        <option value="5">5ラウンド</option>
+        <option value="10" selected>10ラウンド</option>
+        <option value="20">20ラウンド</option>
+        <option value="50">50ラウンド</option>
+        <option value="0">無制限</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>💰 初期チップ数</label>
+      <select id="start-chips">
+        <option value="500">500</option>
+        <option value="1000" selected>1,000</option>
+        <option value="2000">2,000</option>
+        <option value="5000">5,000</option>
+        <option value="10000">10,000</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>🔵 BB（ビッグブラインド）</label>
+      <select id="bb-amount">
+        <option value="10">10</option>
+        <option value="20" selected>20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="200">200</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>🤖 CPU難易度</label>
+      <select id="cpu-level">
+        <option value="easy">イージー</option>
+        <option value="normal" selected>ノーマル</option>
+        <option value="hard">ハード</option>
+      </select>
+    </div>
+    <button class="btn-start" onclick="startGame()">🃏 ゲームスタート</button>
+  </div>
 </div>
+
 <!-- GAME SCREEN -->
 <div id="game-screen" class="screen">
   <div class="info-bar">
@@ -2005,10 +1947,8 @@ function showLog(msg) {
 //  UI HELPERS
 // ============================================================
 function showScreen(id) {
-  document.getElementById("title-screen").style.display = "none";
-  document.getElementById("game-screen").style.display = "none";
-
-  document.getElementById(id).style.display = "block";
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
 function toggleHandsRef() {
@@ -2016,8 +1956,6 @@ function toggleHandsRef() {
 }
 
 function startGame() {
-  alert("スタート押された");
-
   const cfg = {
     numPlayers: parseInt(document.getElementById('num-players').value),
     numRounds: parseInt(document.getElementById('num-rounds').value),
@@ -2025,14 +1963,18 @@ function startGame() {
     bb: parseInt(document.getElementById('bb-amount').value),
     cpuLevel: document.getElementById('cpu-level').value,
   };
-
+  
   initGame(cfg);
-
+  document.getElementById('blinds-info').textContent = `SB:${cfg.bb/2} BB:${cfg.bb}`;
+  showScreen('game-screen');
+  
+  // Wait for layout then start
   setTimeout(()=>{
     startRound();
   }, 200);
 }
-}function goToTitle() {
+
+function goToTitle() {
   showScreen('title-screen');
 }
 
@@ -2045,13 +1987,6 @@ window.addEventListener('resize', ()=>{
 window.onload = () => {
   showScreen('title-screen');
 };
-window.initGame = initGame;
-window.startRound = startRound;
-window.showScreen = showScreen;
-window.renderAll = renderAll;
-window.initGame = initGame;
-window.startRound = startRound;
-window.showScreen = showScreen;
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -2060,60 +1995,140 @@ import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0
 const firebaseConfig = {
   apiKey: "AIzaSyC_2cmzqbLwfEyBLSoK7r-R9JNv9ha7-9g",
   authDomain: "texas-e6455.firebaseapp.com",
-  databaseURL: "https://texas-e6455-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "texas-e6455",
   storageBucket: "texas-e6455.firebasestorage.app",
   messagingSenderId: "690288210681",
   appId: "1:690288210681:web:87eb7c0c8db2cc5cbb2828"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-let roomId = "";
 
-function setupListener() {
-  alert("listenerセット"); // 👈確認
-
-  onValue(ref(db, "rooms/" + roomId + "/config"), (snapshot) => {
-    alert("受信した"); // 👈最重要
-
-    const cfg = snapshot.val();
-    if (!cfg) return;
-
-    initGame(cfg);
-    showScreen('game-screen');
-
-    setTimeout(() => {
-      startRound();
-    }, 200);
-  });
-}
-window.joinRoom = () => {
-  roomId = document.getElementById("roomId").value;
-
-  alert("join：" + roomId); // 👈確認
-
-  setupListener();
-};
-window.createRoom = () => {
-  roomId = document.getElementById("roomId").value;
-
-  set(ref(db, "rooms/" + roomId), { created: true });
-
-  setupListener(); // 👈 これも忘れない
-
-  alert("部屋作成OK");
-};
-</script>
-<script>
-document.getElementById("btnCreate").onclick = () => {
-  alert("部屋作成しました");
-};
-
-document.getElementById("btnJoin").onclick = () => {
-  alert("参加しました");
-};
-
-document.getElementById("startBtn").onclick = () => {
+// テスト
+set(ref(db, "test"), {
+  msg: "OK"
+});
 </script>
 </body>
 </html>
+
+<script type="module">
+import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const db = getDatabase();
+
+let roomId = null;
+let myId = Math.random().toString(36).slice(2);
+let isHost = false;
+
+// ================= UI =================
+const ui = document.createElement("div");
+ui.style.position = "fixed";
+ui.style.bottom = "10px";
+ui.style.left = "10px";
+ui.style.zIndex = "999";
+ui.innerHTML = `
+<input id="roomIdInput" placeholder="部屋ID">
+<button id="createBtn">作成</button>
+<button id="joinBtn">参加</button>
+`;
+document.body.appendChild(ui);
+
+// ================= 部屋作成 =================
+document.getElementById("createBtn").onclick = async () => {
+  roomId = Math.random().toString(36).slice(2, 7);
+  isHost = true;
+
+  await set(ref(db, "rooms/" + roomId), {
+    players: {},
+    state: null,
+    action: null,
+    host: myId
+  });
+
+  alert("部屋ID: " + roomId);
+  joinRoom();
+};
+
+// ================= 参加 =================
+document.getElementById("joinBtn").onclick = () => {
+  roomId = document.getElementById("roomIdInput").value;
+  if (!roomId) return alert("ID入れて");
+  joinRoom();
+};
+
+function joinRoom() {
+  set(ref(db, `rooms/${roomId}/players/${myId}`), {
+    name: "P" + myId.slice(0, 4)
+  });
+
+  listenState();
+  listenAction();
+}
+
+// ================= 状態同期 =================
+function listenState() {
+  onValue(ref(db, `rooms/${roomId}/state`), (snap) => {
+    const data = snap.val();
+    if (!data) return;
+    G = data;
+    renderAll();
+  });
+}
+
+// ================= アクション送信 =================
+const originalPlayerAction = window.playerAction;
+window.playerAction = function(type) {
+  if (!roomId) return originalPlayerAction(type);
+
+  update(ref(db, `rooms/${roomId}`), {
+    action: {
+      type,
+      player: myId,
+      timestamp: Date.now()
+    }
+  });
+};
+
+// ================= ホストだけ処理 =================
+function listenAction() {
+  onValue(ref(db, `rooms/${roomId}/action`), (snap) => {
+    const act = snap.val();
+    if (!act || !isHost) return;
+
+    handleAction(act);
+
+    set(ref(db, `rooms/${roomId}/state`), G);
+  });
+}
+
+// ================= アクション処理 =================
+function handleAction(act) {
+  const current = G.players[G.currentIdx];
+  if (!current) return;
+
+  // 自分のターンじゃなければ無視
+  if (current.id !== 0 && act.player !== myId) return;
+
+  originalPlayerAction(act.type);
+}
+
+// ================= startGameをホスト専用に =================
+const originalStartGame = window.startGame;
+window.startGame = function() {
+  originalStartGame();
+
+  if (roomId && isHost) {
+    setTimeout(() => {
+      set(ref(db, `rooms/${roomId}/state`), G);
+    }, 300);
+  }
+};
+
+// ================= CPU制御（ホストだけ） =================
+const originalCpuAction = window.cpuAction;
+window.cpuAction = function(player) {
+  if (!isHost) return;
+  originalCpuAction(player);
+};
+</script>
