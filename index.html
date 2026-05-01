@@ -2021,14 +2021,12 @@ function startGame() {
     bb: parseInt(document.getElementById('bb-amount').value),
     cpuLevel: document.getElementById('cpu-level').value,
   };
-  
-  initGame(cfg);
-  document.getElementById('blinds-info').textContent = `SB:${cfg.bb/2} BB:${cfg.bb}`;
-  showScreen('game-screen');
-  
-  setTimeout(()=>{
-    startRound();
-  }, 200);
+
+  // ❌ ローカル開始しない
+  // initGame(cfg);
+
+  // 👇 これだけ
+  set(ref(db, "rooms/" + roomId + "/config"), cfg);
 }
 function goToTitle() {
   showScreen('title-screen');
@@ -2065,29 +2063,35 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 let roomId = "";
 
-window.addEventListener("DOMContentLoaded", () => {
+function setupListener() {
+  onValue(ref(db, "rooms/" + roomId + "/config"), (snapshot) => {
+    const cfg = snapshot.val();
+    if (!cfg) return;
 
-  document.getElementById("btnCreate").onclick = () => {
-    alert("作成押された");
-  };
+    // 👇 ここで全員スタート
+    initGame(cfg);
+    showScreen('game-screen');
 
-  document.getElementById("btnJoin").onclick = () => {
-    alert("参加押された");
-  };
+    setTimeout(() => {
+      startRound();
+    }, 200);
+  });
+}
+window.joinRoom = () => {
+  roomId = document.getElementById("roomId").value;
 
-});
-// テスト
-set(ref(db, "test"), {
-  msg: "OK"
-});
-</script>
-<script>
-document.getElementById("btnCreate").onclick = () => {
-  alert("作成OK");
-};
+  setupListener(); // 👈 これが超重要
 
-document.getElementById("btnJoin").onclick = () => {
   alert("参加OK");
+};
+window.createRoom = () => {
+  roomId = document.getElementById("roomId").value;
+
+  set(ref(db, "rooms/" + roomId), { created: true });
+
+  setupListener(); // 👈 これも忘れない
+
+  alert("部屋作成OK");
 };
 </script>
 </body>
