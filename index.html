@@ -1,6 +1,40 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<html>
+<head>
+
+  <!-- 👇 ここに追加 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 👇 ここに追加 -->
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #0b0f1a;
+    }
+
+    #game-container {
+      width: 95vw;
+      max-width: 900px;
+      height: 90vh;
+      max-height: 700px;
+      background: #123;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Texas Hold'em Poker</title>
@@ -929,114 +963,115 @@ body {
 <body>
 
 <!-- TITLE SCREEN -->
-<div id="title-screen" class="screen active">
-  <div style="text-align:center; margin-top:20px;">
-    <input id="roomId" placeholder="部屋ID" style="font-size:20px; padding:10px; width:200px;"><br><br>
+<div id="game-container">  
+  <div id="title-screen" class="screen active">
+    <div style="text-align:center; margin-top:20px;">
+      <input id="roomId" placeholder="部屋ID" style="font-size:20px; padding:10px; width:200px;"><br><br>
+    
+      <button id="btnCreate" style="font-size:24px; padding:15px 30px; margin:10px;">
+        部屋作成
+      </button>
+    
+      <button id="btnJoin" style="font-size:24px; padding:15px 30px; margin:10px;">
+        参加
+      </button>
+    </div>
+    <div class="title-logo">
+      <h1>TEXAS HOLD'EM</h1>
+      <div class="subtitle">PROFESSIONAL POKER</div>
+    </div>
+    <div class="title-cards">
+      <div class="deco-card" style="color:#c0392b">🂱</div>
+      <div class="deco-card" style="color:#1a1a2e">🂮</div>
+      <div class="deco-card" style="color:#c0392b">🂻</div>
+      <div class="deco-card" style="color:#1a1a2e">🃁</div>
+      <div class="deco-card" style="color:#c0392b">🂼</div>
+    </div>
   
-    <button id="btnCreate" style="font-size:24px; padding:15px 30px; margin:10px;">
-      部屋作成
-    </button>
+    <div class="rules-panel">
+      <h2>📋 ゲームルール</h2>
+      <div class="rules-grid">
+        <div class="rule-item"><strong>基本：</strong>2枚の手札と5枚のコミュニティカードで最強の5枚を作る</div>
+        <div class="rule-item"><strong>ブラインド：</strong>毎ラウンドSBとBBが強制ベット。ディーラーボタンが左回りに移動</div>
+        <div class="rule-item"><strong>プリフロップ：</strong>手札2枚配布後、BBの左から始動。アクション順に進む</div>
+        <div class="rule-item"><strong>フロップ：</strong>コミュニティカード3枚公開。SBから時計回りにアクション</div>
+        <div class="rule-item"><strong>ターン：</strong>4枚目公開。同様にアクション</div>
+        <div class="rule-item"><strong>リバー：</strong>5枚目公開。最終ベッティングラウンド</div>
+        <div class="rule-item"><strong>ショーダウン：</strong>全員の手札公開。最強の手を持つプレイヤーが勝利</div>
+        <div class="rule-item"><strong>レイズ：</strong>前のレイズ額以上の増額が必要。最低レイズ = BB×2</div>
+      </div>
+    </div>
   
-    <button id="btnJoin" style="font-size:24px; padding:15px 30px; margin:10px;">
-      参加
-    </button>
-  </div>
-  <div class="title-logo">
-    <h1>TEXAS HOLD'EM</h1>
-    <div class="subtitle">PROFESSIONAL POKER</div>
-  </div>
-  <div class="title-cards">
-    <div class="deco-card" style="color:#c0392b">🂱</div>
-    <div class="deco-card" style="color:#1a1a2e">🂮</div>
-    <div class="deco-card" style="color:#c0392b">🂻</div>
-    <div class="deco-card" style="color:#1a1a2e">🃁</div>
-    <div class="deco-card" style="color:#c0392b">🂼</div>
-  </div>
-
-  <div class="rules-panel">
-    <h2>📋 ゲームルール</h2>
-    <div class="rules-grid">
-      <div class="rule-item"><strong>基本：</strong>2枚の手札と5枚のコミュニティカードで最強の5枚を作る</div>
-      <div class="rule-item"><strong>ブラインド：</strong>毎ラウンドSBとBBが強制ベット。ディーラーボタンが左回りに移動</div>
-      <div class="rule-item"><strong>プリフロップ：</strong>手札2枚配布後、BBの左から始動。アクション順に進む</div>
-      <div class="rule-item"><strong>フロップ：</strong>コミュニティカード3枚公開。SBから時計回りにアクション</div>
-      <div class="rule-item"><strong>ターン：</strong>4枚目公開。同様にアクション</div>
-      <div class="rule-item"><strong>リバー：</strong>5枚目公開。最終ベッティングラウンド</div>
-      <div class="rule-item"><strong>ショーダウン：</strong>全員の手札公開。最強の手を持つプレイヤーが勝利</div>
-      <div class="rule-item"><strong>レイズ：</strong>前のレイズ額以上の増額が必要。最低レイズ = BB×2</div>
+    <div class="hands-panel">
+      <h2>🏆 役の強さ（強い順）</h2>
+      <div class="hand-list">
+        <div class="hand-item"><div class="hand-rank">1</div><div><div class="hand-name">ロイヤルフラッシュ</div><div class="hand-desc">A K Q J 10 同スート</div></div></div>
+        <div class="hand-item"><div class="hand-rank">2</div><div><div class="hand-name">ストレートフラッシュ</div><div class="hand-desc">連続5枚 同スート</div></div></div>
+        <div class="hand-item"><div class="hand-rank">3</div><div><div class="hand-name">フォーカード</div><div class="hand-desc">同ランク4枚</div></div></div>
+        <div class="hand-item"><div class="hand-rank">4</div><div><div class="hand-name">フルハウス</div><div class="hand-desc">スリーカード＋ペア</div></div></div>
+        <div class="hand-item"><div class="hand-rank">5</div><div><div class="hand-name">フラッシュ</div><div class="hand-desc">同スート5枚</div></div></div>
+        <div class="hand-item"><div class="hand-rank">6</div><div><div class="hand-name">ストレート</div><div class="hand-desc">連続5枚</div></div></div>
+        <div class="hand-item"><div class="hand-rank">7</div><div><div class="hand-name">スリーカード</div><div class="hand-desc">同ランク3枚</div></div></div>
+        <div class="hand-item"><div class="hand-rank">8</div><div><div class="hand-name">ツーペア</div><div class="hand-desc">ペア×2</div></div></div>
+        <div class="hand-item"><div class="hand-rank">9</div><div><div class="hand-name">ワンペア</div><div class="hand-desc">同ランク2枚</div></div></div>
+        <div class="hand-item"><div class="hand-rank">10</div><div><div class="hand-name">ハイカード</div><div class="hand-desc">役なし（最高カード）</div></div></div>
+      </div>
     </div>
-  </div>
-
-  <div class="hands-panel">
-    <h2>🏆 役の強さ（強い順）</h2>
-    <div class="hand-list">
-      <div class="hand-item"><div class="hand-rank">1</div><div><div class="hand-name">ロイヤルフラッシュ</div><div class="hand-desc">A K Q J 10 同スート</div></div></div>
-      <div class="hand-item"><div class="hand-rank">2</div><div><div class="hand-name">ストレートフラッシュ</div><div class="hand-desc">連続5枚 同スート</div></div></div>
-      <div class="hand-item"><div class="hand-rank">3</div><div><div class="hand-name">フォーカード</div><div class="hand-desc">同ランク4枚</div></div></div>
-      <div class="hand-item"><div class="hand-rank">4</div><div><div class="hand-name">フルハウス</div><div class="hand-desc">スリーカード＋ペア</div></div></div>
-      <div class="hand-item"><div class="hand-rank">5</div><div><div class="hand-name">フラッシュ</div><div class="hand-desc">同スート5枚</div></div></div>
-      <div class="hand-item"><div class="hand-rank">6</div><div><div class="hand-name">ストレート</div><div class="hand-desc">連続5枚</div></div></div>
-      <div class="hand-item"><div class="hand-rank">7</div><div><div class="hand-name">スリーカード</div><div class="hand-desc">同ランク3枚</div></div></div>
-      <div class="hand-item"><div class="hand-rank">8</div><div><div class="hand-name">ツーペア</div><div class="hand-desc">ペア×2</div></div></div>
-      <div class="hand-item"><div class="hand-rank">9</div><div><div class="hand-name">ワンペア</div><div class="hand-desc">同ランク2枚</div></div></div>
-      <div class="hand-item"><div class="hand-rank">10</div><div><div class="hand-name">ハイカード</div><div class="hand-desc">役なし（最高カード）</div></div></div>
+  
+    <div class="setup-panel">
+      <h2>⚙️ ゲーム設定</h2>
+      <div class="form-row">
+        <label>👥 プレイヤー数</label>
+        <select id="num-players">
+          <option value="2">2人</option>
+          <option value="3">3人</option>
+          <option value="4">4人</option>
+          <option value="5">5人</option>
+          <option value="6" selected>6人</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>🔄 ラウンド数</label>
+        <select id="num-rounds">
+          <option value="5">5ラウンド</option>
+          <option value="10" selected>10ラウンド</option>
+          <option value="20">20ラウンド</option>
+          <option value="50">50ラウンド</option>
+          <option value="0">無制限</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>💰 初期チップ数</label>
+        <select id="start-chips">
+          <option value="500">500</option>
+          <option value="1000" selected>1,000</option>
+          <option value="2000">2,000</option>
+          <option value="5000">5,000</option>
+          <option value="10000">10,000</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>🔵 BB（ビッグブラインド）</label>
+        <select id="bb-amount">
+          <option value="10">10</option>
+          <option value="20" selected>20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>🤖 CPU難易度</label>
+        <select id="cpu-level">
+          <option value="easy">イージー</option>
+          <option value="normal" selected>ノーマル</option>
+          <option value="hard">ハード</option>
+        </select>
+      </div>
+      <button class="btn-start" onclick="startGame()">🃏 ゲームスタート</button>
     </div>
-  </div>
-
-  <div class="setup-panel">
-    <h2>⚙️ ゲーム設定</h2>
-    <div class="form-row">
-      <label>👥 プレイヤー数</label>
-      <select id="num-players">
-        <option value="2">2人</option>
-        <option value="3">3人</option>
-        <option value="4">4人</option>
-        <option value="5">5人</option>
-        <option value="6" selected>6人</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <label>🔄 ラウンド数</label>
-      <select id="num-rounds">
-        <option value="5">5ラウンド</option>
-        <option value="10" selected>10ラウンド</option>
-        <option value="20">20ラウンド</option>
-        <option value="50">50ラウンド</option>
-        <option value="0">無制限</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <label>💰 初期チップ数</label>
-      <select id="start-chips">
-        <option value="500">500</option>
-        <option value="1000" selected>1,000</option>
-        <option value="2000">2,000</option>
-        <option value="5000">5,000</option>
-        <option value="10000">10,000</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <label>🔵 BB（ビッグブラインド）</label>
-      <select id="bb-amount">
-        <option value="10">10</option>
-        <option value="20" selected>20</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-        <option value="200">200</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <label>🤖 CPU難易度</label>
-      <select id="cpu-level">
-        <option value="easy">イージー</option>
-        <option value="normal" selected>ノーマル</option>
-        <option value="hard">ハード</option>
-      </select>
-    </div>
-    <button class="btn-start" onclick="startGame()">🃏 ゲームスタート</button>
   </div>
 </div>
-
 <!-- GAME SCREEN -->
 <div id="game-screen" class="screen">
   <div class="info-bar">
