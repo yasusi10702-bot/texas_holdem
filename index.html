@@ -2022,10 +2022,8 @@ function startGame() {
     cpuLevel: document.getElementById('cpu-level').value,
   };
 
-  // ❌ ローカル開始しない
-  // initGame(cfg);
+  alert("送信するよ"); // 👈 追加
 
-  // 👇 これだけ
   set(ref(db, "rooms/" + roomId + "/config"), cfg);
 }
 function goToTitle() {
