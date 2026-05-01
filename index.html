@@ -983,7 +983,7 @@ body {
 
 <!-- TITLE SCREEN -->
 <div id="game-container">  
-  <div id="title-screen" class="screen active">
+  <div id="title-screen">
     <div id="room-ui">
       <input id="roomId" placeholder="部屋ID">
       <button id="btnCreate">部屋作成</button>
@@ -2016,15 +2016,12 @@ function toggleHandsRef() {
 }
 
 function startGame() {
-  alert("startGame動いた");
+  alert("スタート押された");
 
-  initGame({}); // 仮でもOK
-
-  // 👇 強制表示テスト
+  // 👇 強制的に画面切り替え
   document.getElementById("title-screen").style.display = "none";
   document.getElementById("game-screen").style.display = "block";
-
-  alert("ここまで来た");
+}
 }function goToTitle() {
   showScreen('title-screen');
 }
@@ -2107,8 +2104,6 @@ document.getElementById("btnJoin").onclick = () => {
 };
 
 document.getElementById("startBtn").onclick = () => {
-  alert("ゲーム開始しました");
-};
 </script>
 </body>
 </html>
