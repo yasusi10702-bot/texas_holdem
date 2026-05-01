@@ -1081,7 +1081,7 @@ body {
           <option value="hard">ハード</option>
         </select>
       </div>
-      <button class="btn-start" onclick="startGame()">🃏 ゲームスタート</button>
+      <button id="startBtn" onclick="startGame()">ゲーム開始</button>
     </div>
   </div>
 </div>
@@ -2014,6 +2014,8 @@ function toggleHandsRef() {
 }
 
 function startGame() {
+  alert("startGame呼ばれた");
+
   const cfg = {
     numPlayers: parseInt(document.getElementById('num-players').value),
     numRounds: parseInt(document.getElementById('num-rounds').value),
@@ -2022,9 +2024,12 @@ function startGame() {
     cpuLevel: document.getElementById('cpu-level').value,
   };
 
-  alert("送信するよ"); // 👈 追加
+  initGame(cfg);
+  showScreen('game-screen');
 
-  set(ref(db, "rooms/" + roomId + "/config"), cfg);
+  setTimeout(()=>{
+    startRound();
+  }, 200);
 }
 function goToTitle() {
   showScreen('title-screen');
@@ -2093,6 +2098,19 @@ window.createRoom = () => {
   setupListener(); // 👈 これも忘れない
 
   alert("部屋作成OK");
+};
+</script>
+<script>
+document.getElementById("btnCreate").onclick = () => {
+  alert("部屋作成しました");
+};
+
+document.getElementById("btnJoin").onclick = () => {
+  alert("参加しました");
+};
+
+document.getElementById("startBtn").onclick = () => {
+  alert("ゲーム開始しました");
 };
 </script>
 </body>
