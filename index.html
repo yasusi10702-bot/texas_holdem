@@ -2062,11 +2062,14 @@ const db = getDatabase(app);
 let roomId = "";
 
 function setupListener() {
+  alert("listenerセット"); // 👈確認
+
   onValue(ref(db, "rooms/" + roomId + "/config"), (snapshot) => {
+    alert("受信した"); // 👈最重要
+
     const cfg = snapshot.val();
     if (!cfg) return;
 
-    // 👇 ここで全員スタート
     initGame(cfg);
     showScreen('game-screen');
 
@@ -2078,9 +2081,9 @@ function setupListener() {
 window.joinRoom = () => {
   roomId = document.getElementById("roomId").value;
 
-  setupListener(); // 👈 これが超重要
+  alert("join：" + roomId); // 👈確認
 
-  alert("参加OK");
+  setupListener();
 };
 window.createRoom = () => {
   roomId = document.getElementById("roomId").value;
