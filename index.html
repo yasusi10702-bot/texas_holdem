@@ -2025,8 +2025,15 @@ function startGame() {
       cpuLevel: document.getElementById('cpu-level').value,
     };
 
+    alert("init前"); // 👈ここ追加
+
     initGame(cfg);
+
+    alert("init後"); // 👈ここ追加
+
     showScreen('game-screen');
+
+    alert("画面切替後"); // 👈ここ追加
 
     setTimeout(()=>{
       startRound();
@@ -2053,6 +2060,9 @@ window.initGame = initGame;
 window.startRound = startRound;
 window.showScreen = showScreen;
 window.renderAll = renderAll;
+window.initGame = initGame;
+window.startRound = startRound;
+window.showScreen = showScreen;
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
