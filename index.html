@@ -2005,8 +2005,10 @@ function showLog(msg) {
 //  UI HELPERS
 // ============================================================
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  document.getElementById("title-screen").style.display = "none";
+  document.getElementById("game-screen").style.display = "none";
+
+  document.getElementById(id).style.display = "block";
 }
 
 function toggleHandsRef() {
@@ -2016,34 +2018,14 @@ function toggleHandsRef() {
 function startGame() {
   alert("startGame動いた");
 
-  try {
-    const cfg = {
-      numPlayers: parseInt(document.getElementById('num-players').value),
-      numRounds: parseInt(document.getElementById('num-rounds').value),
-      startChips: parseInt(document.getElementById('start-chips').value),
-      bb: parseInt(document.getElementById('bb-amount').value),
-      cpuLevel: document.getElementById('cpu-level').value,
-    };
+  initGame({}); // 仮でもOK
 
-    alert("init前"); // 👈ここ追加
+  // 👇 強制表示テスト
+  document.getElementById("title-screen").style.display = "none";
+  document.getElementById("game-screen").style.display = "block";
 
-    initGame(cfg);
-
-    alert("init後"); // 👈ここ追加
-
-    showScreen('game-screen');
-
-    alert("画面切替後"); // 👈ここ追加
-
-    setTimeout(()=>{
-      startRound();
-    }, 200);
-
-  } catch (e) {
-    alert("エラー：" + e.message);
-  }
-}
-function goToTitle() {
+  alert("ここまで来た");
+}function goToTitle() {
   showScreen('title-screen');
 }
 
