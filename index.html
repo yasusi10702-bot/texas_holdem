@@ -14,6 +14,25 @@
 
   <!-- 👇 ここに追加 -->
   <style>
+    #room-ui {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    
+      background: rgba(0,0,0,0.8);
+      padding: 15px;
+    
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    
+      z-index: 999;
+    }
+    
+    body {
+      padding-bottom: 80px;
+    }
     body {
       margin: 0;
       display: flex;
@@ -965,16 +984,10 @@ body {
 <!-- TITLE SCREEN -->
 <div id="game-container">  
   <div id="title-screen" class="screen active">
-    <div style="text-align:center; margin-top:20px;">
-      <input id="roomId" placeholder="部屋ID" style="font-size:20px; padding:10px; width:200px;"><br><br>
-    
-      <button id="btnCreate" style="font-size:24px; padding:15px 30px; margin:10px;">
-        部屋作成
-      </button>
-    
-      <button id="btnJoin" style="font-size:24px; padding:15px 30px; margin:10px;">
-        参加
-      </button>
+    <div id="room-ui">
+      <input id="roomId" placeholder="部屋ID">
+      <button id="btnCreate">部屋作成</button>
+      <button id="btnJoin">参加</button>
     </div>
     <div class="title-logo">
       <h1>TEXAS HOLD'EM</h1>
