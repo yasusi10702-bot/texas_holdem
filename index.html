@@ -6,9 +6,6 @@
 <title>Texas Hold'em Poker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
-<input id="roomId" placeholder="部屋ID">
-<button id="btnCreate">部屋作成</button>
-<button id="btnJoin">参加</button>
 :root {
   --felt: #1a4a2e;
   --felt-dark: #0f2e1c;
@@ -933,6 +930,11 @@ body {
 
 <!-- TITLE SCREEN -->
 <div id="title-screen" class="screen active">
+  <div>
+    <input id="roomId" placeholder="部屋ID">
+    <button id="btnCreate">部屋作成</button>
+    <button id="btnJoin">参加</button>
+  </div>
   <div class="title-logo">
     <h1>TEXAS HOLD'EM</h1>
     <div class="subtitle">PROFESSIONAL POKER</div>
@@ -2026,7 +2028,13 @@ set(ref(db, "test"), {
 });
 </script>
 <script>
-alert("JS動いてる");
+document.getElementById("btnCreate").onclick = () => {
+  alert("作成OK");
+};
+
+document.getElementById("btnJoin").onclick = () => {
+  alert("参加OK");
+};
 </script>
 </body>
 </html>
